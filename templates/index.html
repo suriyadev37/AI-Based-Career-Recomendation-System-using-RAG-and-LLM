@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareerPath AI — Find Your Direction</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+<style>
+  /* ── Video fills the entire viewport behind everything ── */
+  .video-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .video-bg video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+    display: block;
+  }
+  /* Dark overlay so text is readable */
+  .video-bg::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(7, 7, 15, 0.60);
+  }
+
+  /* Body: full viewport, flex, centre everything */
+  body.page-index {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* All content layers must sit ABOVE the fixed video */
+  body.page-index .bg-grid,
+  body.page-index .bg-blob1,
+  body.page-index .bg-blob2 {
+    z-index: 1;
+  }
+  body.page-index .index-container {
+    position: relative;
+    z-index: 2;
+  }
+</style>
+</head>
+<body class="page-index">
+
+  <!-- FIXED VIDEO BACKGROUND -->
+  <div class="video-bg">
+    <video autoplay muted loop playsinline preload="auto">
+      <source src="static/v7.mp4"  type="video/mp4">
+    </video>
+  </div>
+
+  <!-- grid + blob decorations (sit above video) -->
+
+  <div class="bg-blob1"></div>
+  <div class="bg-blob2"></div>
+
+  <!-- MAIN CONTENT — centred over the video -->
+  <div class="index-container">
+    <header class="index-header">
+      <span class="logo">✦ CareerPath AI</span>
+      <h1 style="font-size: 50px;">Discover Your<br><span style="font-size: 100px;">Perfect Career</span></h1>
+      <p class="subtitle">AI-powered career guidance tailored to your unique background, skills, and aspirations.</p>
+      <a href="selection.html" class="btn-predict">Start Prediction</a>
+    </header>
+  </div>
+
+</body>
+</html>

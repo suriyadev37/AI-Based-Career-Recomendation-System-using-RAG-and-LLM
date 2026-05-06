@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocational Career — CareerPath AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body class="page-uneducated">
+<div class="bg-blob1"></div>
+<div class="bg-blob2"></div>
+
+<div class="form-container narrow">
+  <a href="/" class="back">← Back to Home</a>
+
+  <div class="form-header">
+    <span class="form-tag">🔨 Vocational / No Degree</span>
+    <h1>Find Your Trade Career</h1>
+    <p class="form-subtitle">Tell us about your abilities — we'll recommend the best career path for you.</p>
+  </div>
+
+  <form action="/predict-uneducated" method="post" onsubmit="showLoading()">
+    <div class="form-card">
+      <div class="field">
+        <label>Can you read?</label>
+        <div class="radio-group">
+          <div class="radio-option"><input type="radio" name="can_read" id="r_yes" value="Yes" required><label for="r_yes">Yes</label></div>
+          <div class="radio-option"><input type="radio" name="can_read" id="r_no" value="No"><label for="r_no">No</label></div>
+          <div class="radio-option"><input type="radio" name="can_read" id="r_basic" value="Basic only"><label for="r_basic">Basic only</label></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Can you write?</label>
+        <div class="radio-group">
+          <div class="radio-option"><input type="radio" name="can_write" id="w_yes" value="Yes" required><label for="w_yes">Yes</label></div>
+          <div class="radio-option"><input type="radio" name="can_write" id="w_no" value="No"><label for="w_no">No</label></div>
+          <div class="radio-option"><input type="radio" name="can_write" id="w_basic" value="Basic only"><label for="w_basic">Basic only</label></div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="interest">What are you most interested in?</label>
+        <textarea id="interest" name="interest" placeholder="e.g. Cooking, Fixing cars, Building things, Working outdoors..." required></textarea>
+      </div>
+      <div class="field">
+        <label for="skills">What practical skills do you already have?</label>
+        <textarea id="skills" name="skills" placeholder="e.g. I can plumb pipes, I know basic electrical work, good with hands..." required></textarea>
+      </div>
+      <div class="field">
+        <label>Do you prefer physical work?</label>
+        <div class="radio-group">
+          <div class="radio-option"><input type="radio" name="physical_work_preference" id="p_yes" value="Yes, I prefer physical work" required><label for="p_yes">Yes, physical</label></div>
+          <div class="radio-option"><input type="radio" name="physical_work_preference" id="p_no" value="No, prefer indoor/desk work"><label for="p_no">No, indoor</label></div>
+          <div class="radio-option"><input type="radio" name="physical_work_preference" id="p_both" value="Mix of both"><label for="p_both">Mix of both</label></div>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">✦ Predict My Career Path</button>
+    <div class="loading" id="loading">🔮 Analyzing your profile... Please wait (this may take 10–20 seconds)</div>
+  </form>
+</div>
+
+<script src="static/main.js"></script>
+</body>
+</html>

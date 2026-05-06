@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Seeker — CareerPath AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body class="page-jobseeker">
+<div class="bg-blob1"></div>
+<div class="bg-blob2"></div>
+
+<div class="form-container">
+  <a href="/" class="back">← Back to Home</a>
+
+  <div class="form-header">
+    <span class="form-tag">💼 Working Professional</span>
+    <h1>Find Your Next Dream Job</h1>
+    <p class="form-subtitle">Tell us about your current role and goals — we'll recommend the best next career move.</p>
+  </div>
+
+  <form action="/predict-jobseeker" method="post" onsubmit="showLoading()">
+    <div class="form-card">
+      <div class="section-title">Current Role</div>
+      <div class="two-col">
+        <div class="field">
+          <label for="current_role">Current Job Title</label>
+          <input type="text" id="current_role" name="current_role" placeholder="e.g. Software Developer" required>
+        </div>
+        <div class="field">
+          <label for="current_company">Current Company</label>
+          <input type="text" id="current_company" name="current_company" placeholder="e.g. Infosys, TCS..." required>
+        </div>
+      </div>
+      <div class="three-col">
+        <div class="field">
+          <label for="experience_years">Years of Experience</label>
+          <input type="number" id="experience_years" name="experience_years" placeholder="e.g. 3" min="0" max="50" required>
+        </div>
+        <div class="field">
+          <label for="current_ctc">Current CTC</label>
+          <input type="text" id="current_ctc" name="current_ctc" placeholder="e.g. 6 LPA" required>
+        </div>
+        <div class="field">
+          <label for="expected_ctc">Expected CTC</label>
+          <input type="text" id="expected_ctc" name="expected_ctc" placeholder="e.g. 10 LPA" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Work Mode Preference</label>
+        <div class="radio-group">
+          <div class="radio-option"><input type="radio" name="work_mode" id="wm_remote" value="Remote" required><label for="wm_remote">Remote</label></div>
+          <div class="radio-option"><input type="radio" name="work_mode" id="wm_hybrid" value="Hybrid"><label for="wm_hybrid">Hybrid</label></div>
+          <div class="radio-option"><input type="radio" name="work_mode" id="wm_onsite" value="On-site"><label for="wm_onsite">On-site</label></div>
+          <div class="radio-option"><input type="radio" name="work_mode" id="wm_any" value="Flexible/Any"><label for="wm_any">Flexible</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="section-title">Skills</div>
+      <div id="skills-container">
+        <div class="skill-row">
+          <input type="text" name="skills" placeholder="Skill (e.g. Java, React, SQL)" required>
+          <select name="proficiencies" required>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate" selected>Intermediate</option>
+            <option value="Advanced">Advanced</option>
+            <option value="Expert">Expert</option>
+          </select>
+          <button type="button" class="remove-btn" onclick="removeRow(this)">✕</button>
+        </div>
+      </div>
+      <button type="button" class="add-btn" onclick="addSkillJobseeker()">+ Add Skill</button>
+    </div>
+
+    <div class="form-card">
+      <div class="section-title">Projects &amp; Achievements</div>
+      <div class="field">
+        <label>Key Projects</label>
+        <div id="projects-container">
+          <div class="dynamic-row">
+            <input type="text" name="projects" placeholder="e.g. Built a microservices e-commerce platform">
+            <button type="button" class="remove-btn" onclick="removeRow(this)">✕</button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addDynamic('projects-container','projects','Project description')">+ Add Project</button>
+      </div>
+
+      <div class="field">
+        <label>Achievements</label>
+        <div id="achievements-container">
+          <div class="dynamic-row">
+            <input type="text" name="achievements" placeholder="e.g. Reduced API response time by 40%">
+            <button type="button" class="remove-btn" onclick="removeRow(this)">✕</button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addDynamic('achievements-container','achievements','Achievement description')">+ Add Achievement</button>
+      </div>
+
+      <div class="field">
+        <label for="change_reason">Why are you looking for a change?</label>
+        <textarea id="change_reason" name="change_reason" placeholder="e.g. Want better growth, higher salary, remote work opportunities, different domain..." required></textarea>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn">✦ Find My Next Best Job</button>
+    <div class="loading" id="loading">🔮 Analyzing your profile... Please wait</div>
+  </form>
+</div>
+
+<script src="static/main.js"></script>
+<script>
+  window.SKILL_LEVEL_NAME = 'proficiencies';
+  function addSkillJobseeker() {
+    addSkill([
+      { value: 'Beginner',     label: 'Beginner' },
+      { value: 'Intermediate', label: 'Intermediate', selected: true },
+      { value: 'Advanced',     label: 'Advanced' },
+      { value: 'Expert',       label: 'Expert' }
+    ]);
+  }
+</script>
+</body>
+</html>

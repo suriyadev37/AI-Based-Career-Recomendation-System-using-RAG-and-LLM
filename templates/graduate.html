@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graduate — CareerPath AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body class="page-graduate">
+<div class="bg-blob1"></div>
+<div class="bg-blob2"></div>
+
+<div class="form-container">
+  <a href="/" class="back">← Back to Home</a>
+
+  <div class="form-header">
+    <span class="form-tag">🎓 Degree Holder</span>
+    <h1>Find Your Best Career Path</h1>
+    <p class="form-subtitle">We'll recommend the ideal job role or higher education path based on your degree and profile.</p>
+  </div>
+
+  <form action="/predict-graduate" method="post" onsubmit="showLoading()">
+    <div class="form-card">
+      <div class="section-title">Academic Background</div>
+      <div class="two-col">
+        <div class="field">
+          <label for="degree_name">Degree Name</label>
+          <input type="text" id="degree_name" name="degree_name" placeholder="e.g. B.E, B.Sc, B.Com, BA..." required>
+        </div>
+        <div class="field">
+          <label for="specialization">Specialization</label>
+          <input type="text" id="specialization" name="specialization" placeholder="e.g. Computer Science, Finance..." required>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="field">
+          <label for="cgpa">CGPA / Percentage</label>
+          <input type="text" id="cgpa" name="cgpa" placeholder="e.g. 8.5 or 85%" required>
+        </div>
+        <div class="field">
+          <label>Career Type Goal</label>
+          <select name="career_type" required>
+            <option value="">Select...</option>
+            <option>Job in Private Sector</option>
+            <option>Government Job</option>
+            <option>Higher Education (Masters)</option>
+            <option>Study Abroad</option>
+            <option>Startup / Entrepreneur</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="section-title">Projects &amp; Experience</div>
+      <div class="field">
+        <label>Projects</label>
+        <div id="projects-container">
+          <div class="dynamic-row">
+            <input type="text" name="projects" placeholder="Project title or description">
+            <button type="button" class="remove-btn" onclick="removeRow(this)">✕</button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addDynamic('projects-container','projects','Project title or description')">+ Add Project</button>
+      </div>
+
+      <div class="field">
+        <label>Internships</label>
+        <div id="internships-container">
+          <div class="dynamic-row">
+            <input type="text" name="internships" placeholder="e.g. Software Intern at XYZ Corp">
+            <button type="button" class="remove-btn" onclick="removeRow(this)">✕</button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addDynamic('internships-container','internships','e.g. Software Intern at XYZ Corp')">+ Add Internship</button>
+      </div>
+
+      <div class="field">
+        <label>Certifications</label>
+        <div id="certs-container">
+          <div class="dynamic-row">
+            <input type="text" name="certs" placeholder="e.g. AWS Cloud Practitioner, Google Analytics...">
+            <button type="button" class="remove-btn" onclick="removeRow(this)">✕</button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addDynamic('certs-container','certs','e.g. Certification name')">+ Add Certification</button>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="section-title">Skills</div>
+      <div id="skills-container">
+        <div class="skill-row">
+          <input type="text" name="skills" placeholder="Skill (e.g. Python, Excel)" required>
+          <select name="skill_levels" required>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+          <button type="button" class="remove-btn" onclick="removeRow(this)">✕</button>
+        </div>
+      </div>
+      <button type="button" class="add-btn" onclick="addSkillGraduate()">+ Add Skill</button>
+
+      <div class="field" style="margin-top:24px">
+        <label for="hobbies">Hobbies &amp; Interests</label>
+        <textarea id="hobbies" name="hobbies" placeholder="e.g. Open source, Blogging, Stock market, Sports..." required></textarea>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn">✦ Predict My Career Path</button>
+    <div class="loading" id="loading">🔮 Analyzing your profile... Please wait</div>
+  </form>
+</div>
+
+<script src="static/main.js"></script>
+<script>
+  /* Graduate uses "skill_levels" as the select name, no Expert option */
+  window.SKILL_LEVEL_NAME = 'skill_levels';
+  function addSkillGraduate() {
+    addSkill([
+      { value: 'Beginner',     label: 'Beginner' },
+      { value: 'Intermediate', label: 'Intermediate' },
+      { value: 'Advanced',     label: 'Advanced' }
+    ]);
+  }
+</script>
+</body>
+</html>

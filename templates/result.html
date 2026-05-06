@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if data.error %}Error{% else %}{{ data.title }}{% endif %} — CareerPath AI</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+<!-- result page overrides the bg token used by base reset -->
+<style>
+  /* result page uses a slightly different bg shade */
+  body { --bg: #07070f; --surface: #0f0f1a; --border: #191928; }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="page">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="javascript:history.back()">← Go Back</a>
+    <span class="nav-logo">CareerPath AI</span>
+  </nav>
+
+  {% if data.error %}
+  <!-- ══════════════ ERROR ══════════════ -->
+  <div class="error-wrap">
+    <div class="error-icon">⚡</div>
+
+    {% if "Cannot connect" in data.error %}
+      <div class="error-title">Cannot Reach Local LLM</div>
+      <div class="error-sub">Could not connect to the Ollama server at <code>vs-llm.theworkpc.com:11434</code>.</div>
+      <div class="fix-box">
+        <div class="fix-title">🔧 How to Fix</div>
+        <div class="fix-step"><div class="fix-num">1</div><div>Make sure Ollama is running on the server machine</div></div>
+        <div class="fix-step"><div class="fix-num">2</div><div>Port <code>11434</code> must be open and reachable from this machine</div></div>
+        <div class="fix-step"><div class="fix-num">3</div><div>Verify model: <code>ollama run qwen2.5:7b-instruct-q4_K_M</code></div></div>
+        <div class="fix-step"><div class="fix-num">4</div><div>Restart app: <code>uvicorn main:app --reload</code></div></div>
+      </div>
+    {% elif "timed out" in data.error %}
+      <div class="error-title">Request Timed Out</div>
+      <div class="error-sub">The LLM took too long to respond. The model may still be loading into memory.</div>
+      <div class="fix-box">
+        <div class="fix-title">🔧 How to Fix</div>
+        <div class="fix-step"><div class="fix-num">1</div><div>Wait 30–60 seconds for the model to finish loading, then retry</div></div>
+        <div class="fix-step"><div class="fix-num">2</div><div>Check available RAM / VRAM — model needs ~6 GB</div></div>
+        <div class="fix-step"><div class="fix-num">3</div><div>Test server: <code>curl http://vs-llm.theworkpc.com:11434/api/tags</code></div></div>
+      </div>
+    {% elif data.error == "no_response" %}
+      <div class="error-title">Empty Response</div>
+      <div class="error-sub">The LLM returned an empty reply. Try submitting the form again.</div>
+      <div class="fix-box">
+        <div class="fix-title">🔧 How to Fix</div>
+        <div class="fix-step"><div class="fix-num">1</div><div>Try submitting the form again — usually a one-off issue</div></div>
+        <div class="fix-step"><div class="fix-num">2</div><div>Check Ollama server logs for OOM messages</div></div>
+        <div class="fix-step"><div class="fix-num">3</div><div>Confirm model loaded: <code>ollama list</code></div></div>
+      </div>
+    {% else %}
+      <div class="error-title">LLM Error</div>
+      <div class="error-sub">{{ data.error }}</div>
+      <div class="fix-box">
+        <div class="fix-title">🔧 General Troubleshooting</div>
+        <div class="fix-step"><div class="fix-num">1</div><div>Check Ollama: <code>curl http://vs-llm.theworkpc.com:11434/api/tags</code></div></div>
+        <div class="fix-step"><div class="fix-num">2</div><div>Confirm model: <code>ollama list</code></div></div>
+        <div class="fix-step"><div class="fix-num">3</div><div>Check terminal running <code>uvicorn main:app --reload</code> for full error</div></div>
+      </div>
+    {% endif %}
+
+    <div class="btn-row">
+      <a href="javascript:history.back()" class="btn-primary">← Try Again</a>
+      <a href="/" class="btn-secondary">Home</a>
+    </div>
+  </div>
+
+  {% else %}
+  <!-- ══════════════ RESULT ══════════════ -->
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="ai-badge">✦ &nbsp;AI Recommendation</div>
+    <h1 class="hero-title">{{ data.title }}</h1>
+    <p class="hero-sub">Personalised Career Recommendation</p>
+  </div>
+
+  <!-- WHY THIS CAREER -->
+  <div class="sec fade-1">
+    <div class="sec-head">
+      <span class="sec-label">Why This Career</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="why-card">
+      {% for line in data.why %}{% if line|trim %}
+      <div class="why-item">
+        <span class="why-arrow">→</span>{{ line|trim }}
+      </div>
+      {% endif %}{% endfor %}
+      {% if not data.why %}
+      <div class="why-item"><span class="why-arrow">→</span>This career matches your profile and skills.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  {% if data.skills %}
+  <div class="sec fade-2">
+    <div class="sec-head">
+      <span class="sec-label">Skills Required</span>
+      <div class="sec-line"></div>
+    </div>
+
+    {% set tag_colors = ["#7c3aed","#06b6d4","#f59e0b","#10b981","#ec4899","#3b82f6","#a855f7","#14b8a6","#f97316","#84cc16"] %}
+
+    <div class="skills-tags-wrap">
+      {% for skill in data.skills %}{% if skill|trim %}
+        {% set tc = tag_colors[loop.index0 % tag_colors|length] %}
+        <div class="skill-tag"
+             style="border-color:{{ tc }}33; --tag-color:{{ tc }};"
+             onmouseover="this.style.borderColor='{{ tc }}88'; this.style.boxShadow='0 0 14px {{ tc }}22';"
+             onmouseout="this.style.borderColor='{{ tc }}33'; this.style.boxShadow='none';">
+          <span class="skill-tag-dot" style="background:{{ tc }}; box-shadow:0 0 5px {{ tc }};"></span>
+          {{ skill|trim }}
+        </div>
+      {% endif %}{% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ROADMAP -->
+  {% if data.roadmap %}
+  <div class="sec fade-3">
+    <div class="sec-head">
+      <span class="sec-label">Learning Roadmap</span>
+      <div class="sec-line"></div>
+    </div>
+
+    {% set step_colors_hex = ["#7c3aed","#06b6d4","#f59e0b","#10b981","#ec4899","#3b82f6","#a855f7","#14b8a6","#f97316","#84cc16"] %}
+
+    <div class="rmsh-wrap">
+    <div class="rm-tree">
+
+      <!-- ══ START NODE ══ -->
+      <div class="rm-box rm-start-node">▶ &nbsp; Begin Learning</div>
+
+      <!-- Spine seed -->
+      <div class="rm-spine-seg">
+        <div class="rm-vline" style="height:28px; --lc:#7c3aed55;"></div>
+        <div class="rm-spine-dot" style="--dc:#7c3aed88;"></div>
+      </div>
+
+      {% for step in data.roadmap %}
+        {% set ci     = loop.index0 % step_colors_hex|length %}
+        {% set c      = step_colors_hex[ci] %}
+        {% set title  = step.title.split(':')[1].strip() if ':' in step.title else step.title %}
+        {% set desc   = step.get('desc', '') | trim if step is mapping else '' %}
+        {% set subs   = desc.split('.') if desc else [] %}
+        {% set left_subs  = [] %}
+        {% set right_subs = [] %}
+        {% for sp in subs %}{% if sp|trim %}
+          {% if loop.index is odd %}{% set _ = left_subs.append(sp|trim) %}
+          {% else %}{% set _ = right_subs.append(sp|trim) %}{% endif %}
+        {% endif %}{% endfor %}
+
+        <!-- ══ STAGE ROW ══ -->
+        <div class="rm-stage-row">
+
+          <!-- LEFT branch -->
+          <div class="rm-branch" style="padding-right: 0;">
+            {% if left_subs %}
+            <div class="rm-sub-group">
+              {% for sp in left_subs[:2] %}
+              <div class="rm-harm" style="justify-content: flex-end;">
+                <div class="rm-box rm-sub-node"
+                     style="--sub-border:{{ c }}30; --sub-hover:{{ c }}66; --sub-bg:#0b0b1a; text-align:right;">
+                  {{ sp }}
+                </div>
+                <div class="rm-hline" style="--lc:{{ c }}55;"></div>
+                <div class="rm-hdot"  style="--lc:{{ c }}aa;"></div>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- CENTRE stage node -->
+          <div class="rm-box rm-stage-node"
+               style="--nc:{{ c }}; --nb:{{ c }}18; --ns:{{ c }}44;">
+            <div class="rm-stage-num">Step {{ loop.index }}</div>
+            <div class="rm-stage-title">{{ title }}</div>
+          </div>
+
+          <!-- RIGHT branch -->
+          <div class="rm-branch rm-branch-right" style="padding-left: 0;">
+            {% if right_subs %}
+            <div class="rm-sub-group">
+              {% for sp in right_subs[:2] %}
+              <div class="rm-harm" style="justify-content: flex-start;">
+                <div class="rm-hdot"  style="--lc:{{ c }}aa;"></div>
+                <div class="rm-hline" style="--lc:{{ c }}55;"></div>
+                <div class="rm-box rm-sub-node"
+                     style="--sub-border:{{ c }}30; --sub-hover:{{ c }}66; --sub-bg:#0b0b1a; text-align:left;">
+                  {{ sp }}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+
+        </div><!-- /rm-stage-row -->
+
+        {% if not loop.last %}
+        <!-- Spine between stages -->
+        <div class="rm-spine-seg">
+          <div class="rm-vline" style="height:30px; --lc:{{ c }}44;"></div>
+          <div class="rm-spine-dot" style="--dc:{{ c }}88;"></div>
+        </div>
+        {% endif %}
+
+      {% endfor %}
+
+      <!-- Final spine to END -->
+      <div class="rm-spine-seg">
+        <div class="rm-vline" style="height:30px; --lc:#7c3aed55;"></div>
+        <div class="rm-spine-dot" style="--dc:#7c3aed99;"></div>
+        <div class="rm-vline" style="height:16px; --lc:#7c3aed55;"></div>
+      </div>
+
+      <!-- ══ END NODE ══ -->
+      <div class="rm-box rm-end-node" style="display:inline-flex; flex-direction:column; gap:4px;">
+        <div class="rm-end-sub">Career Achieved</div>
+        <div class="rm-end-title">{{ data.title }} 🎉</div>
+      </div>
+
+    </div><!-- /rm-tree -->
+  </div>
+  {% endif %}
+
+  <!-- COURSES -->
+  {% if data.courses and data.courses|length > 0 %}
+  <div class="sec fade-4">
+    <div class="sec-head">
+      <span class="sec-label">Recommended Courses</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="courses-grid">
+      {% for course in data.courses %}
+      {% if course.link and course.name %}
+      <a href="{{ course.link }}" target="_blank" rel="noopener noreferrer" class="course-card">
+        <div class="course-icon-wrap">{{ course.icon if course.icon else '🎓' }}</div>
+        <div class="course-info">
+          <div class="course-name">{{ course.name }}</div>
+          <div class="course-platform">{{ course.platform if course.platform else '' }}</div>
+          <div class="course-url">{{ course.link }}</div>
+        </div>
+        <div class="course-arrow">↗</div>
+      </a>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- CTA -->
+  <div class="cta fade-5">
+    <a href="/">← Try Another Profile</a>
+  </div>
+
+  {% endif %}
+</div><!-- /page -->
+</body>
+</html>

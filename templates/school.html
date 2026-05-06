@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Student — CareerPath AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body class="page-school">
+<div class="bg-blob1"></div>
+<div class="bg-blob2"></div>
+
+<div class="form-container">
+  <a href="/" class="back">← Back to Home</a>
+
+  <div class="form-header">
+    <span class="form-tag">📚 School Student</span>
+    <h1>Find Your Next Study Path</h1>
+    <p class="form-subtitle">Enter your academic profile and we'll recommend the best courses and streams for you.</p>
+  </div>
+
+  <form action="/predict-school" method="post" onsubmit="showLoading()">
+    <div class="form-card">
+      <div class="section-title">Academic Information</div>
+      <div class="two-col">
+        <div class="field">
+          <label>Qualification</label>
+          <select name="qualification" required>
+            <option value="">Select...</option>
+            <option>10th (SSLC)</option>
+            <option>11th Standard</option>
+            <option>12th (HSC)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Board of Study</label>
+          <select name="board_of_study" required>
+            <option value="">Select...</option>
+            <option>State Board</option>
+            <option>CBSE</option>
+            <option>ICSE</option>
+            <option>IB</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Subjects &amp; Marks</label>
+        <div id="subjects-container">
+          <div class="dynamic-row has-marks">
+            <input type="text" name="subjects" placeholder="Subject name (e.g. Maths)" required>
+            <input type="number" name="marks" placeholder="Mark %" min="0" max="100" required>
+            <button type="button" class="remove-btn" onclick="removeRow(this)">✕</button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addSubject()">+ Add Subject</button>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label for="fav_subject">Favourite Subject</label>
+          <input type="text" id="fav_subject" name="fav_subject" placeholder="e.g. Mathematics" required>
+        </div>
+        <div class="field">
+          <label for="exam_name">Competitive Exam Preparing (optional)</label>
+          <input type="text" id="exam_name" name="exam_name" placeholder="e.g. NEET, JEE, UPSC...">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="section-title">Career Preference</div>
+      <div class="field">
+        <label>Career Type Goal</label>
+        <div class="radio-group">
+          <div class="radio-option"><input type="radio" name="career_type" id="ct_govt" value="Government Job" required><label for="ct_govt">Government Job</label></div>
+          <div class="radio-option"><input type="radio" name="career_type" id="ct_priv" value="Private Sector"><label for="ct_priv">Private Sector</label></div>
+          <div class="radio-option"><input type="radio" name="career_type" id="ct_entre" value="Entrepreneur"><label for="ct_entre">Entrepreneur</label></div>
+          <div class="radio-option"><input type="radio" name="career_type" id="ct_research" value="Research / Academic"><label for="ct_research">Research</label></div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="extra_curricular">Extra Curricular Activities</label>
+        <textarea id="extra_curricular" name="extra_curricular" placeholder="e.g. Cricket, Drawing, Debate club, NCC..." required></textarea>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="section-title">Skills</div>
+      <div id="skills-container">
+        <div class="skill-row">
+          <input type="text" name="skills" placeholder="Skill (e.g. Programming)" required>
+          <select name="proficiencies" required>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+          <button type="button" class="remove-btn" onclick="removeRow(this)">✕</button>
+        </div>
+      </div>
+      <button type="button" class="add-btn" onclick="addSkillSchool()">+ Add Skill</button>
+
+      <div class="field" style="margin-top:24px">
+        <label for="hobbies">Hobbies &amp; Passions</label>
+        <textarea id="hobbies" name="hobbies" placeholder="e.g. Reading, Gaming, Photography, Cooking..." required></textarea>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn">✦ Predict My Study Path</button>
+    <div class="loading" id="loading">🔮 Analyzing your profile... Please wait</div>
+  </form>
+</div>
+
+<script src="static/main.js"></script>
+<script>
+  window.SKILL_LEVEL_NAME = 'proficiencies';
+  function addSkillSchool() {
+    addSkill([
+      { value: 'Beginner',     label: 'Beginner' },
+      { value: 'Intermediate', label: 'Intermediate' },
+      { value: 'Advanced',     label: 'Advanced' }
+    ]);
+  }
+</script>
+</body>
+</html>

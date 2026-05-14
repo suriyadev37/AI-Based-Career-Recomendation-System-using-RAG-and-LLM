@@ -197,54 +197,12 @@ CareerPath-AI/
 │   └── result1.png
 │
 ├── data/
-├── chroma_db/
+│   ├── vocational.json
+│   ├── school.json
+│   └── graduate and job.json
 ├── requirements.txt
 └── README.md
 ```
-
----
-
-# 🚀 Installation
-
-## Clone Repository
-
-```bash
-git clone https://github.com/your-username/CareerPath-AI.git
-```
-
----
-
-## Move to Project Folder
-
-```bash
-cd CareerPath-AI
-```
-
----
-
-## Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-# ▶️ Run The Application
-
-```bash
-uvicorn main:app --reload
-```
-
----
-
-# 🌐 Open in Browser
-
-```bash
-http://127.0.0.1:8000
-```
-
----
 
 # 🧠 AI Workflow
 
@@ -315,38 +273,3 @@ Roadmap + Skills + Courses
 - 🤖 AI Interview Preparation
 - 📈 Career Progress Tracking
 - ☁️ Cloud Deployment
-
----
-
-# 👨‍💻 Developed By
-
-# Suriya Kumar
-
-📧 suriyakumar63693@gmail.com
-
-🔗 GitHub:  
-https://github.com/suriyadev37
-
----
-
-# ⭐ Support
-
-If you like this project, give it a ⭐ on GitHub.
-
----
-
-# 📜 License
-
-This project is developed for educational and portfolio purposes.
-
----
-
-# 🧠 Project Highlights
-
-✅ AI + RAG Based System  
-✅ Real-Time Career Guidance  
-✅ Local LLM Integration  
-✅ Modern UI/UX  
-✅ Full Stack AI Application  
-✅ Resume-Level Advanced Project  
-✅ Industry-Oriented Architecture  
